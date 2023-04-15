@@ -17,17 +17,20 @@ export function middleware(req: NextRequest) {
   console.log("[Auth] got access code:", accessCode);
   console.log("[Auth] hashed access code:", hashedCode);
 
-  if (serverConfig.needCode && !serverConfig.codes.has(hashedCode) && !token) {
-    return NextResponse.json(
-      {
-        error: true,
-        needAccessCode: true,
-        msg: "Please go settings page and fill your access code.",
-      },
-      {
-        status: 401,
-      },
-    );
+  if (serverConfig.needCode && !token) {
+    const path = req.headers.get("path");
+    if (!serverConfig.codes.has(hashedCode) || path !== null && path.startsWith("dashboard/billing/usage") && hashedCode !== serverConfig.admin_code) {
+      return NextResponse.json(
+        {
+          error: true,
+          needAccessCode: true,
+          msg: "Please go settings page and fill your access code.",
+        },
+        {
+          status: 401,
+        },
+      );
+    }
   }
 
   // inject api key

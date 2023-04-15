@@ -11,16 +11,19 @@ declare global {
   }
 }
 
-const ACCESS_CODES = (function getAccessCodes(): Set<string> {
+const [ACCESS_CODES, ADMIN_CODE] = (function getAccessCodes(): [
+  Set<string>,
+  string,
+] {
   const code = process.env.CODE;
 
   try {
     const codes = (code?.split(",") ?? [])
       .filter((v) => !!v)
       .map((v) => md5.hash(v.trim()));
-    return new Set(codes);
+    return [new Set(codes), codes[0]];
   } catch (e) {
-    return new Set();
+    return [new Set(), ""];
   }
 })();
 
@@ -35,6 +38,7 @@ export const getServerSideConfig = () => {
     apiKey: process.env.OPENAI_API_KEY,
     code: process.env.CODE,
     codes: ACCESS_CODES,
+    admin_code: ADMIN_CODE,
     needCode: ACCESS_CODES.size > 0,
     proxyUrl: process.env.PROXY_URL,
     isVercel: !!process.env.VERCEL,
