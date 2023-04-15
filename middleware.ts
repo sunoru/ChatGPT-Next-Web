@@ -19,7 +19,7 @@ export function middleware(req: NextRequest) {
 
   if (serverConfig.needCode && !token) {
     const path = req.headers.get("path");
-    if (!serverConfig.codes.has(hashedCode) || path !== null && path.startsWith("dashboard/billing/usage") && hashedCode !== serverConfig.admin_code) {
+    if (!serverConfig.codes.has(hashedCode) || path !== null && path.startsWith("dashboard/billing/") && hashedCode !== serverConfig.admin_code) {
       return NextResponse.json(
         {
           error: true,
