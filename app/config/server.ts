@@ -5,8 +5,11 @@ declare global {
     interface ProcessEnv {
       OPENAI_API_KEY?: string;
       CODE?: string;
+      BASE_URL?: string;
       PROXY_URL?: string;
       VERCEL?: string;
+      HIDE_USER_API_KEY?: string; // disable user's api key input
+      DISABLE_GPT4?: string; // allow user to use gpt-4 or not
     }
   }
 }
@@ -40,7 +43,10 @@ export const getServerSideConfig = () => {
     codes: ACCESS_CODES,
     admin_code: ADMIN_CODE,
     needCode: ACCESS_CODES.size > 0,
+    baseUrl: process.env.BASE_URL,
     proxyUrl: process.env.PROXY_URL,
     isVercel: !!process.env.VERCEL,
+    hideUserApiKey: !!process.env.HIDE_USER_API_KEY,
+    enableGPT4: !process.env.DISABLE_GPT4,
   };
 };
