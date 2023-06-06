@@ -40,11 +40,19 @@ export function auth(req: NextRequest) {
   console.log("[User IP] ", getIP(req));
   console.log("[Time] ", new Date().toLocaleString());
 
-  if (serverConfig.needCode && !serverConfig.codes.has(hashedCode) && !token) {
-    return {
-      error: true,
-      msg: !accessCode ? "empty access code" : "wrong access code",
-    };
+  if (serverConfig.needCode && !token) {
+    const path = req.headers.get("path");
+    if (
+      !serverConfig.codes.has(hashedCode) ||
+      (path !== null &&
+        path.startsWith("dashboard/billing/") &&
+        hashedCode !== serverConfig.admin_code)
+    ) {
+      return {
+        error: true,
+        msg: !accessCode ? "empty access code" : "wrong access code",
+      };
+    }
   }
 
   // if user does not provide an api key, inject system api key
