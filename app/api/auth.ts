@@ -39,7 +39,7 @@ export function auth(req: NextRequest, modelProvider: ModelProvider) {
   console.log("[User IP] ", getIP(req));
   console.log("[Time] ", new Date().toLocaleString());
 
-  if (serverConfig.needCode && !token) {
+  if (serverConfig.needCode && !apiKey) {
     const path = req.headers.get("path");
     if (
       !serverConfig.codes.has(hashedCode) ||

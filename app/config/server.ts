@@ -102,8 +102,6 @@ export const getServerSideConfig = () => {
     codes: ACCESS_CODES,
 
     admin_code: ADMIN_CODE,
-    needCode: ACCESS_CODES.size > 0,
-    baseUrl: process.env.BASE_URL,
 
     proxyUrl: process.env.PROXY_URL,
     isVercel: !!process.env.VERCEL,
