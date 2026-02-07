@@ -17,7 +17,7 @@ import { showImageModal, FullScreen } from "./ui-lib";
 import {
   ArtifactsShareButton,
   HTMLPreview,
-  HTMLPreviewHander,
+  HTMLPreviewHandler,
 } from "./artifacts";
 import { useChatStore } from "../store";
 import { IconButton } from "./button";
@@ -73,7 +73,7 @@ export function Mermaid(props: { code: string }) {
 
 export function PreCode(props: { children: any }) {
   const ref = useRef<HTMLPreElement>(null);
-  const previewRef = useRef<HTMLPreviewHander>(null);
+  const previewRef = useRef<HTMLPreviewHandler>(null);
   const [mermaidCode, setMermaidCode] = useState("");
   const [htmlCode, setHtmlCode] = useState("");
   const { height } = useWindowSize();
@@ -248,6 +248,10 @@ function escapeBrackets(text: string) {
 
 function tryWrapHtmlCode(text: string) {
   // try add wrap html code (fixed: html codeblock include 2 newline)
+  // ignore embed codeblock
+  if (text.includes("```")) {
+    return text;
+  }
   return text
     .replace(
       /([`]*?)(\w*?)([\n\r]*?)(<!DOCTYPE html>)/g,
